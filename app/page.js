@@ -11,6 +11,8 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [staticCharacters, setStaticCharacters] = useState([]);
+  const [boostedBoss, setBoostedBoss] = useState(null);
+  const [boostedCreature, setBoostedCreature] = useState(null);
 
   useEffect(() => {
     const fetchStaticCharacters = async () => {
@@ -34,7 +36,43 @@ const Home = () => {
       setLoading(false);
     };
 
+    const fetchBoostedBoss = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await axios.get("https://api.tibiadata.com/v4/boostablebosses");
+        const { boosted } = response.data.boostable_bosses;
+        if (boosted) {
+          setBoostedBoss(boosted);
+        }
+      } catch (error) {
+        setError("Error fetching boosted boss data. Please try again.");
+      }
+
+      setLoading(false);
+    };
+
+    const fetchBoostedCreature = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await axios.get(`https://api.tibiadata.com/v4/creatures`);
+        const { boosted } = response.data.creatures;
+        if (boosted) {
+          setBoostedCreature(boosted);
+        }
+      } catch (error) {
+        setError("Error fetching boosted creature data. Please try again.");
+      }
+
+      setLoading(false);
+    };
+
     fetchStaticCharacters();
+    fetchBoostedBoss();
+    fetchBoostedCreature();
   }, []);
 
   const fetchCharacterData = async () => {
@@ -64,36 +102,57 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen p-5 flex flex-col items-center background-image ">
-      <form
-        onSubmit={handleSubmit}
-        className="mb-5 flex flex-col md:flex-row items-center bg-white p-4 rounded-lg shadow-lg w-full max-w-md"
-        style={{
-          fontFamily: "Verdana", // Aplica la fuente Verdana
-          fontWeight: "bold", // Aplica negrita
-          backgroundImage: 'url("/fondo.png")',
-          backgroundSize: "cover", // Esto ajusta el tamaño de la imagen para cubrir todo el contenedor
-          backgroundPosition: "center", // Esto centra la imagen en el contenedor
-          backgroundRepeat: "no-repeat", // Esto evita que la imagen se repita
-        }}
-      >
-        <input
-          type="text"
-          value={characterName}
-          onChange={handleInputChange}
-          placeholder="Enter character name"
-          className="border border-gray-300 rounded-md p-2 mb-2 md:mb-0 md:mr-2 w-full"
-        />
-        <button
-          type="submit"
-          className="bg-blue-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-800 transition"
+    <div className="min-h-screen p-5 flex flex-col items-center background-image">
+      <div className="flex justify-between items-start w-full max-w-4xl">
+        <form
+          onSubmit={handleSubmit}
+          className="mb-5 flex flex-col md:flex-row items-center bg-white p-4 rounded-lg shadow-lg w-full"
           style={{
-            backgroundColor: "rgb(13, 46, 43)",
+            fontFamily: "Verdana",
+            fontWeight: "bold",
+            backgroundImage: 'url("/fondo.png")',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
           }}
         >
-          Search
-        </button>
-      </form>
+          <input
+            type="text"
+            value={characterName}
+            onChange={handleInputChange}
+            placeholder="Enter character name"
+            className="border border-gray-300 rounded-md p-2 mb-2 md:mb-0 md:mr-2 w-full"
+          />
+          <button
+            type="submit"
+            className="bg-blue-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-800 transition"
+            style={{
+              backgroundColor: "rgb(13, 46, 43)",
+            }}
+          >
+            Search
+          </button>
+        </form>
+
+        <div className="flex flex-row items-start ml-4 space-x-4">
+          {boostedBoss && (
+            <div className="flex items-center bg-gray-800 p-2 rounded-lg shadow-lg min-w-max">
+              <img src={boostedBoss.image_url} alt={boostedBoss.name} className="w-16 h-16 mr-2" />
+              <p className="text-white font-verdana font-bold overflow-hidden text-ellipsis whitespace-nowrap">
+                {boostedBoss.name}
+              </p>
+            </div>
+          )}
+          {boostedCreature && (
+            <div className="flex items-center bg-gray-800 p-2 rounded-lg shadow-lg min-w-max">
+              <img src={boostedCreature.image_url} alt={boostedCreature.name} className="w-16 h-16 mr-2" />
+              <p className="text-white font-verdana font-bold overflow-hidden text-ellipsis whitespace-nowrap">
+                {boostedCreature.name}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
 
       {loading && <p className="text-lg text-white">Loading...</p>}
       {error && <p className="text-red-300 font-semibold">{error}</p>}
