@@ -1,16 +1,16 @@
 const CharacterInfo = ({ character }) => {
-  const getBackgroundColor = (vocation) => {
+  const getVocationColor = (vocation) => {
     switch (vocation) {
       case "Royal Paladin":
-        return "bg-yellow-600";
+        return "text-yellow-600";
       case "Elite Knight":
-        return "bg-blue-700";
+        return "text-blue-700";
       case "Master Sorcerer":
-        return "bg-purple-700";
+        return "text-purple-700";
       case "Elder Druid":
-        return "bg-green-700";
+        return "text-green-700";
       default:
-        return "bg-gray-300";
+        return "text-gray-300";
     }
   };
 
@@ -18,13 +18,17 @@ const CharacterInfo = ({ character }) => {
 
   return (
     <div
-      className={`relative flex flex-col items-center ${getBackgroundColor(
-        character.vocation
-      )} shadow-lg rounded-lg p-4 transition-transform transform hover:scale-105 w-full max-w-sm mx-auto opacity-80 text-white`}
-      style={{ height: "300px" }} // Ajusta la altura según sea necesario
+      className={`relative flex flex-col items-center bg-gray-800 shadow-lg rounded-lg p-4 transition-transform transform hover:scale-105 w-full max-w-sm mx-auto opacity-100 text-white`}
+      style={{
+        height: "300px", // Ajusta la altura según sea necesario
+        backgroundImage: 'url("/fondo.png")',
+        backgroundSize: "cover", // Esto ajusta el tamaño de la imagen para cubrir todo el contenedor
+        backgroundPosition: "center", // Esto centra la imagen en el contenedor
+        backgroundRepeat: "no-repeat", // Esto evita que la imagen se repita
+      }}
     >
       <div
-        className={`absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center ${
+        className={`absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center ${
           onlineStatus ? "bg-green-500" : "bg-red-500"
         } shadow-md`}
         style={{
@@ -34,16 +38,16 @@ const CharacterInfo = ({ character }) => {
           }, ${onlineStatus ? "rgba(0, 200, 0, 0.6)" : "rgba(200, 0, 0, 0.6)"})`,
         }}
       >
-        <div className={`w-4 h-4 rounded-full ${onlineStatus ? "bg-green-700" : "bg-red-700"}`}></div>
+        <div className={`w-2 h-2 rounded-full ${onlineStatus ? "bg-green-700" : "bg-red-700"}`}></div>
       </div>
-      <h2 className="text-lg font-bold mb-5 text-center truncate" title={character.name}>
+      <h2 className="text-lg font-bold mb-2 text-center truncate" title={character.name}>
         {character.name}
       </h2>
       <div className="grid grid-cols-2 gap-2 w-full text-sm flex-grow">
         <p className="font-semibold">Level:</p>
         <p>{character.level}</p>
         <p className="font-semibold">Vocation:</p>
-        <p>{character.vocation}</p>
+        <p className={getVocationColor(character.vocation)}>{character.vocation}</p>
         <p className="font-semibold">Residence:</p>
         <p>{character.residence}</p>
         <p className="font-semibold">Last Login:</p>
@@ -57,6 +61,14 @@ const CharacterInfo = ({ character }) => {
       </div>
       <a
         href={`https://www.tibia.com/community/?subtopic=characters&name=${character.name}`}
+        style={{
+          backgroundImage: 'url("https://static.tibia.com/images/global/buttons/mediumbutton-over.gif")',
+          backgroundSize: "cover", // Esto ajusta el tamaño de la imagen para cubrir el botón
+          backgroundPosition: "center", // Esto centra la imagen en el botón
+          backgroundRepeat: "no-repeat", // Esto evita que la imagen se repita
+          color: "yellow", // Asegura que el texto sea visible sobre la imagen
+          textAlign: "center", // Centra el texto dentro del botón
+        }}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-2 bg-white text-gray-800 py-2 px-4 rounded-lg shadow-md hover:bg-gray-200 transition"

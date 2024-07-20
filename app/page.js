@@ -64,10 +64,18 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen p-5 flex flex-col items-center background-image">
+    <div className="min-h-screen p-5 flex flex-col items-center background-image ">
       <form
         onSubmit={handleSubmit}
         className="mb-5 flex flex-col md:flex-row items-center bg-white p-4 rounded-lg shadow-lg w-full max-w-md"
+        style={{
+          fontFamily: "Verdana", // Aplica la fuente Verdana
+          fontWeight: "bold", // Aplica negrita
+          backgroundImage: 'url("/fondo.png")',
+          backgroundSize: "cover", // Esto ajusta el tamaño de la imagen para cubrir todo el contenedor
+          backgroundPosition: "center", // Esto centra la imagen en el contenedor
+          backgroundRepeat: "no-repeat", // Esto evita que la imagen se repita
+        }}
       >
         <input
           type="text"
@@ -79,6 +87,9 @@ const Home = () => {
         <button
           type="submit"
           className="bg-blue-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-800 transition"
+          style={{
+            backgroundColor: "rgb(13, 46, 43)",
+          }}
         >
           Search
         </button>
