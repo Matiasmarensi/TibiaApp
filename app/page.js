@@ -21,7 +21,10 @@ const Home = () => {
         const responses = await Promise.all(
           staticCharacterNames.map((name) => axios.get(`https://api.tibiadata.com/v4/character/${name}`))
         );
-        const data = responses.map((response) => response.data.character.character);
+        const data = responses.map((response) => ({
+          ...response.data.character.character,
+          other_characters: response.data.character.other_characters,
+        }));
         data.sort((a, b) => b.level - a.level);
         setStaticCharacters(data);
       } catch (error) {
@@ -40,7 +43,10 @@ const Home = () => {
 
     try {
       const response = await axios.get(`https://api.tibiadata.com/v4/character/${characterName}`);
-      setCharacterData(response.data.character.character);
+      setCharacterData({
+        ...response.data.character.character,
+        other_characters: response.data.character.other_characters,
+      });
     } catch (error) {
       setError("Error fetching data. Please try again.");
     }
@@ -61,7 +67,7 @@ const Home = () => {
     <div className="min-h-screen p-5 flex flex-col items-center background-image">
       <form
         onSubmit={handleSubmit}
-        className="mb-1 flex flex-col md:flex-row items-center bg-white p-4 rounded-lg shadow-lg w-full max-w-md"
+        className="mb-5 flex flex-col md:flex-row items-center bg-white p-4 rounded-lg shadow-lg w-full max-w-md"
       >
         <input
           type="text"
@@ -82,7 +88,7 @@ const Home = () => {
       {error && <p className="text-red-300 font-semibold">{error}</p>}
       {characterData && <CharacterInfo character={characterData} />}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 w-full max-w-4xl">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
         {staticCharacters.map((character, index) => (
           <CharacterInfo key={index} character={character} />
         ))}
