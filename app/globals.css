@@ -15,6 +15,12 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+.background-image {
+  background-image: url('https://preview.redd.it/tibia-7-6-background-picture-without-the-lady-v0-bemglq6jryia1.png?width=1024&format=png&auto=webp&s=cb67f838c68c737b9bf68d2d6178f361c2b973b4');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
 body {
   color: rgb(var(--foreground-rgb));
