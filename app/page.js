@@ -2,19 +2,25 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import CharacterInfo from "@/app/components/characterinfo";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const staticCharacterNames = ["cardo", "Jersey Nightmare", "savine", "Jersey Senylo", "spideres"];
 
 const Home = () => {
   const [characterName, setCharacterName] = useState("");
-  const [characterData, setCharacterData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [staticCharacters, setStaticCharacters] = useState([]);
   const [boostedBoss, setBoostedBoss] = useState(null);
   const [boostedCreature, setBoostedCreature] = useState(null);
+  const [searchedCharacters, setSearchedCharacters] = useState([]);
 
   useEffect(() => {
+    // Load searched characters from localStorage
+    const savedCharacters = JSON.parse(localStorage.getItem("searchedCharacters")) || [];
+    setSearchedCharacters(savedCharacters);
+
     const fetchStaticCharacters = async () => {
       setLoading(true);
       setError(null);
@@ -58,7 +64,7 @@ const Home = () => {
       setError(null);
 
       try {
-        const response = await axios.get(`https://api.tibiadata.com/v4/creatures`);
+        const response = await axios.get("https://api.tibiadata.com/v4/creatures");
         const { boosted } = response.data.creatures;
         if (boosted) {
           setBoostedCreature(boosted);
@@ -81,10 +87,14 @@ const Home = () => {
 
     try {
       const response = await axios.get(`https://api.tibiadata.com/v4/character/${characterName}`);
-      setCharacterData({
+      const character = {
         ...response.data.character.character,
         other_characters: response.data.character.other_characters,
-      });
+      };
+      const updatedCharacters = [...searchedCharacters, character];
+      setSearchedCharacters(updatedCharacters);
+      // Save to localStorage
+      localStorage.setItem("searchedCharacters", JSON.stringify(updatedCharacters));
     } catch (error) {
       setError("Error fetching data. Please try again.");
     }
@@ -101,6 +111,12 @@ const Home = () => {
     fetchCharacterData();
   };
 
+  const handleRemoveCharacter = (name) => {
+    const updatedCharacters = searchedCharacters.filter((character) => character.name !== name);
+    setSearchedCharacters(updatedCharacters);
+    // Update localStorage
+    localStorage.setItem("searchedCharacters", JSON.stringify(updatedCharacters));
+  };
   return (
     <div className="min-h-screen p-5 flex flex-col items-center background-image">
       <div className="flex justify-between items-start w-full max-w-4xl">
@@ -156,7 +172,20 @@ const Home = () => {
 
       {loading && <p className="text-lg text-white">Loading...</p>}
       {error && <p className="text-red-300 font-semibold">{error}</p>}
-      {characterData && <CharacterInfo character={characterData} />}
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
+        {searchedCharacters.map((character, index) => (
+          <div key={index} className="relative">
+            <CharacterInfo character={character} />
+            <button
+              onClick={() => handleRemoveCharacter(character.name)}
+              className="absolute top-0 left-0 text-white rounded-full transition p-2"
+            >
+              <FontAwesomeIcon icon={faTimes} className="mr-1" />
+            </button>
+          </div>
+        ))}
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
         {staticCharacters.map((character, index) => (

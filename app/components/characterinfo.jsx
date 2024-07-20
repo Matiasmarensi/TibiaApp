@@ -18,7 +18,7 @@ const CharacterInfo = ({ character }) => {
 
   return (
     <div
-      className={`relative flex flex-col items-center bg-gray-800 shadow-lg rounded-lg p-4 transition-transform transform hover:scale-105 w-full max-w-sm mx-auto opacity-100 text-white`}
+      className={`relative flex flex-col items-center bg-gray-800 shadow-lg rounded-lg p-4 w-full max-w-sm mx-auto opacity-100 text-white`}
       style={{
         height: "300px", // Ajusta la altura según sea necesario
         backgroundImage: 'url("/fondo.png")',
