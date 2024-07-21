@@ -1,9 +1,11 @@
 "use client";
-import { useState, useEffect, FormEvent, ChangeEvent } from "react";
-import CharacterInfo from "@/app/components/characterinfo";
+import { useState, useEffect, FormEvent, ChangeEvent, Suspense, lazy } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import Loader from "./components/loader"; // Asegúrate de importar el loader correctamente
+
+const CharacterInfo = lazy(() => import("@/app/components/characterinfo"));
 
 const staticCharacterNames = ["cardo", "Jersey Nightmare", "savine", "Jersey Senylo", "spideres"];
 
@@ -87,6 +89,7 @@ const Home = () => {
 
     try {
       const response = await axios.get(`https://api.tibiadata.com/v4/character/${characterName}`);
+      console.log(response.status);
       const character = {
         ...response.data.character.character,
         other_characters: response.data.character.other_characters,
@@ -96,7 +99,11 @@ const Home = () => {
       // Save to localStorage
       localStorage.setItem("searchedCharacters", JSON.stringify(updatedCharacters));
     } catch (error) {
-      setError("Error fetching data. Please try again.");
+      if (error.response && error.response.status !== 200) {
+        setError("Character not found. Please check the name and try again.");
+      } else {
+        setError("Error fetching data. Please try again.");
+      }
     }
 
     setLoading(false);
@@ -117,12 +124,13 @@ const Home = () => {
     // Update localStorage
     localStorage.setItem("searchedCharacters", JSON.stringify(updatedCharacters));
   };
+
   return (
     <div className="min-h-screen p-5 flex flex-col items-center background-image">
-      <div className="flex justify-between items-start w-full max-w-4xl">
+      <div className="flex justify-between items-stretch w-full max-w-4xl ">
         <form
           onSubmit={handleSubmit}
-          className="mb-5 flex flex-col md:flex-row items-center bg-white p-4 rounded-lg shadow-lg w-full"
+          className="mb-5 flex flex-col md:flex-row items-center bg-white p-5 rounded-lg shadow-lg w-full h-full"
           style={{
             fontFamily: "Verdana",
             fontWeight: "bold",
@@ -150,9 +158,9 @@ const Home = () => {
           </button>
         </form>
 
-        <div className="flex flex-row items-start ml-4 space-x-4">
+        <div className="flex flex-row items-stretch ml-5 space-x-4 pb-5">
           {boostedBoss && (
-            <div className="flex items-center bg-gray-800 p-2 rounded-lg shadow-lg min-w-max">
+            <div className="flex items-center bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full">
               <img src={boostedBoss.image_url} alt={boostedBoss.name} className="w-16 h-16 mr-2" />
               <p className="text-white font-verdana font-bold overflow-hidden text-ellipsis whitespace-nowrap">
                 {boostedBoss.name}
@@ -160,7 +168,7 @@ const Home = () => {
             </div>
           )}
           {boostedCreature && (
-            <div className="flex items-center bg-gray-800 p-2 rounded-lg shadow-lg min-w-max">
+            <div className="flex items-center bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full">
               <img src={boostedCreature.image_url} alt={boostedCreature.name} className="w-16 h-16 mr-2" />
               <p className="text-white font-verdana font-bold overflow-hidden text-ellipsis whitespace-nowrap">
                 {boostedCreature.name}
@@ -169,29 +177,30 @@ const Home = () => {
           )}
         </div>
       </div>
-
-      {loading && <p className="text-lg text-white">Loading...</p>}
+      {loading && <Loader />}
       {error && <p className="text-red-300 font-semibold">{error}</p>}
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
-        {searchedCharacters.map((character, index) => (
-          <div key={index} className="relative">
-            <CharacterInfo character={character} />
-            <button
-              onClick={() => handleRemoveCharacter(character.name)}
-              className="absolute top-0 left-0 text-white rounded-full transition p-2"
-            >
-              <FontAwesomeIcon icon={faTimes} className="mr-1" />
-            </button>
-          </div>
-        ))}
-      </div>
+      <Suspense fallback={<Loader />}>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
+          {searchedCharacters.map((character, index) => (
+            <div key={index} className="relative">
+              <CharacterInfo character={character} />
+              <button
+                onClick={() => handleRemoveCharacter(character.name)}
+                className="absolute top-0 left-0 text-white rounded-full transition p-2"
+              >
+                <FontAwesomeIcon icon={faTimes} className="mr-1" />
+              </button>
+            </div>
+          ))}
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
-        {staticCharacters.map((character, index) => (
-          <CharacterInfo key={index} character={character} />
-        ))}
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
+          {staticCharacters.map((character, index) => (
+            <CharacterInfo key={index} character={character} />
+          ))}
+        </div>
+      </Suspense>
     </div>
   );
 };
