@@ -1,113 +1,26 @@
 "use client";
-import { useState, useEffect, FormEvent, ChangeEvent, Suspense, lazy } from "react";
-import axios from "axios";
+import { Suspense, lazy } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import Loader from "./components/loader"; // Asegúrate de importar el loader correctamente
+import Loader from "./components/loader";
+import useCharacterData from "./hooks/useFetchData"; // Asegúrate de importar el custom hook correctamente
 
 const CharacterInfo = lazy(() => import("@/app/components/characterinfo"));
 
-const staticCharacterNames = ["cardo", "Jersey Nightmare", "savine", "Jersey Senylo", "spideres"];
-
 const Home = () => {
-  const [characterName, setCharacterName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [staticCharacters, setStaticCharacters] = useState([]);
-  const [boostedBoss, setBoostedBoss] = useState(null);
-  const [boostedCreature, setBoostedCreature] = useState(null);
-  const [searchedCharacters, setSearchedCharacters] = useState([]);
-
-  useEffect(() => {
-    // Load searched characters from localStorage
-    const savedCharacters = JSON.parse(localStorage.getItem("searchedCharacters")) || [];
-    setSearchedCharacters(savedCharacters);
-
-    const fetchStaticCharacters = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const responses = await Promise.all(
-          staticCharacterNames.map((name) => axios.get(`https://api.tibiadata.com/v4/character/${name}`))
-        );
-        const data = responses.map((response) => ({
-          ...response.data.character.character,
-          other_characters: response.data.character.other_characters,
-        }));
-        data.sort((a, b) => b.level - a.level);
-        setStaticCharacters(data);
-      } catch (error) {
-        setError("Error fetching static characters. Please try again.");
-      }
-
-      setLoading(false);
-    };
-
-    const fetchBoostedBoss = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await axios.get("https://api.tibiadata.com/v4/boostablebosses");
-        const { boosted } = response.data.boostable_bosses;
-        if (boosted) {
-          setBoostedBoss(boosted);
-        }
-      } catch (error) {
-        setError("Error fetching boosted boss data. Please try again.");
-      }
-
-      setLoading(false);
-    };
-
-    const fetchBoostedCreature = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await axios.get("https://api.tibiadata.com/v4/creatures");
-        const { boosted } = response.data.creatures;
-        if (boosted) {
-          setBoostedCreature(boosted);
-        }
-      } catch (error) {
-        setError("Error fetching boosted creature data. Please try again.");
-      }
-
-      setLoading(false);
-    };
-
-    fetchStaticCharacters();
-    fetchBoostedBoss();
-    fetchBoostedCreature();
-  }, []);
-
-  const fetchCharacterData = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await axios.get(`https://api.tibiadata.com/v4/character/${characterName}`);
-      console.log(response.status);
-      const character = {
-        ...response.data.character.character,
-        other_characters: response.data.character.other_characters,
-      };
-      const updatedCharacters = [...searchedCharacters, character];
-      setSearchedCharacters(updatedCharacters);
-      // Save to localStorage
-      localStorage.setItem("searchedCharacters", JSON.stringify(updatedCharacters));
-    } catch (error) {
-      if (error.response && error.response.status !== 200) {
-        setError("Character not found. Please check the name and try again.");
-      } else {
-        setError("Error fetching data. Please try again.");
-      }
-    }
-
-    setLoading(false);
-  };
+  const {
+    characterName,
+    setCharacterName,
+    loading,
+    error,
+    staticCharacters,
+    boostedBoss,
+    boostedCreature,
+    news,
+    searchedCharacters,
+    fetchCharacterData,
+    handleRemoveCharacter,
+  } = useCharacterData();
 
   const handleInputChange = (event) => {
     setCharacterName(event.target.value);
@@ -116,13 +29,6 @@ const Home = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     fetchCharacterData();
-  };
-
-  const handleRemoveCharacter = (name) => {
-    const updatedCharacters = searchedCharacters.filter((character) => character.name !== name);
-    setSearchedCharacters(updatedCharacters);
-    // Update localStorage
-    localStorage.setItem("searchedCharacters", JSON.stringify(updatedCharacters));
   };
 
   return (
@@ -160,7 +66,7 @@ const Home = () => {
 
         <div className="flex flex-row items-stretch ml-5 space-x-4 pb-5">
           {boostedBoss && (
-            <div className="flex items-center bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full">
+            <div className=" bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full">
               <img src={boostedBoss.image_url} alt={boostedBoss.name} className="w-16 h-16 mr-2" />
               <p className="text-white font-verdana font-bold overflow-hidden text-ellipsis whitespace-nowrap">
                 {boostedBoss.name}
@@ -168,7 +74,7 @@ const Home = () => {
             </div>
           )}
           {boostedCreature && (
-            <div className="flex items-center bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full">
+            <div className=" bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full">
               <img src={boostedCreature.image_url} alt={boostedCreature.name} className="w-16 h-16 mr-2" />
               <p className="text-white font-verdana font-bold overflow-hidden text-ellipsis whitespace-nowrap">
                 {boostedCreature.name}
@@ -178,7 +84,7 @@ const Home = () => {
         </div>
       </div>
       {loading && <Loader />}
-      {error && <p className="text-red-300 font-semibold">{error}</p>}
+      {error && <p className="text-black font-semibold">{error}</p>}
 
       <Suspense fallback={<Loader />}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
@@ -193,6 +99,21 @@ const Home = () => {
               </button>
             </div>
           ))}
+        </div>
+        <div>
+          {news.map((newsItem) => {
+            return (
+              <div
+                key={newsItem.id}
+                className="bg-gray-800 p-2 rounded-lg shadow-lg mb-2 text-white font-verdana font-bold break-words whitespace-normal flex  "
+              >
+                <a href={newsItem.url} target="_blank" className="text-blue-400 hover:underline mr-2">
+                  LINK
+                </a>
+                {newsItem.news}
+              </div>
+            );
+          })}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
