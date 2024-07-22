@@ -91,9 +91,9 @@ const Home = () => {
           return (
             <div
               key={newsItem.id}
-              className=" max-h-20 overflow-y-auto bg-gray-800 p-2 rounded-lg shadow-lg mb-2 text-white font-verdana font-bold"
+              className="max-h-20 overflow-y-auto bg-gray-800 p-2 rounded-lg shadow-lg mb-2 text-white font-verdana font-bold backgroundnews"
             >
-              <a href={newsItem.url} target="_blank" className="text-blue-400 hover:underline mr-2">
+              <a href={newsItem.url} target="_blank" className="text-white-400 hover:underline mr-2">
                 LINK
               </a>
               {newsItem.news}
