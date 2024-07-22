@@ -86,6 +86,21 @@ const Home = () => {
       {loading && <Loader />}
       {error && <p className="text-black font-semibold">{error}</p>}
 
+      <div>
+        {news.map((newsItem) => {
+          return (
+            <div
+              key={newsItem.id}
+              className=" max-h-20 overflow-y-auto bg-gray-800 p-2 rounded-lg shadow-lg mb-2 text-white font-verdana font-bold"
+            >
+              <a href={newsItem.url} target="_blank" className="text-blue-400 hover:underline mr-2">
+                LINK
+              </a>
+              {newsItem.news}
+            </div>
+          );
+        })}
+      </div>
       <Suspense fallback={<Loader />}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
           {searchedCharacters.map((character, index) => (
@@ -99,21 +114,6 @@ const Home = () => {
               </button>
             </div>
           ))}
-        </div>
-        <div>
-          {news.map((newsItem) => {
-            return (
-              <div
-                key={newsItem.id}
-                className="max-h-20 overflow-y-auto bg-gray-800 p-2 rounded-lg shadow-lg mb-2 text-white font-verdana font-bold"
-              >
-                <a href={newsItem.url} target="_blank" className="text-blue-400 hover:underline mr-2">
-                  LINK
-                </a>
-                {newsItem.news}
-              </div>
-            );
-          })}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">

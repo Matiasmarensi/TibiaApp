@@ -2,15 +2,19 @@ const CharacterInfo = ({ character }) => {
   const getVocationColor = (vocation) => {
     switch (vocation) {
       case "Royal Paladin":
-        return "text-yellow-600";
+      case "Paladin":
+        return "text-yellow-400";
       case "Elite Knight":
-        return "text-blue-700";
+      case "Knight":
+        return "text-blue-500";
       case "Master Sorcerer":
-        return "text-purple-700";
+      case "Sorcerer":
+        return "text-purple-400";
       case "Elder Druid":
-        return "text-green-700";
+      case "Druid":
+        return "text-green-400";
       default:
-        return "text-gray-300";
+        return "text-gray-100";
     }
   };
 
