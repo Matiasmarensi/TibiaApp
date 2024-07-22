@@ -70,10 +70,9 @@ const useCharacterData = () => {
 
         // map just the news from today
         const currentDate = getCurrentDate();
+        console.log(currentDate);
         const newsFromToday = news.filter((item) => item.date.startsWith(currentDate));
-        const justnew = newsFromToday.map((item) => item.news);
-        const id = newsFromToday.map((item) => item.id);
-        const url = `https://www.tibia.com/news/?subtopic=newsarchive&id=${id}`;
+
         console.log(newsFromToday);
         if (newsFromToday) {
           setNews(newsFromToday);

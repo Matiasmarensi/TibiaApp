@@ -1,7 +1,7 @@
 "use client";
 import { Suspense, lazy } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import Loader from "./components/loader";
 import useCharacterData from "./hooks/useFetchData"; // Asegúrate de importar el custom hook correctamente
 
@@ -95,7 +95,7 @@ const Home = () => {
                 onClick={() => handleRemoveCharacter(character.name)}
                 className="absolute top-0 left-0 text-white rounded-full transition p-2"
               >
-                <FontAwesomeIcon icon={faTimes} className="mr-1" />
+                <FontAwesomeIcon icon={faWindowClose} className="mr-1" />
               </button>
             </div>
           ))}
@@ -105,7 +105,7 @@ const Home = () => {
             return (
               <div
                 key={newsItem.id}
-                className="bg-gray-800 p-2 rounded-lg shadow-lg mb-2 text-white font-verdana font-bold break-words whitespace-normal flex  "
+                className="max-h-20 overflow-y-auto bg-gray-800 p-2 rounded-lg shadow-lg mb-2 text-white font-verdana font-bold"
               >
                 <a href={newsItem.url} target="_blank" className="text-blue-400 hover:underline mr-2">
                   LINK
