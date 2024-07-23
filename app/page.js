@@ -64,17 +64,16 @@ const Home = () => {
           </button>
         </form>
 
-        <div className="flex flex-row items-stretch ml-5 space-x-4 pb-5">
+        <div className="flex flex-row items-center justify-center ml-5 space-x-4 pb-5">
           {boostedBoss && (
-            <div className=" bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full">
-              <img src={boostedBoss.image_url} alt={boostedBoss.name} className="w-16 h-16 mr-2" />
-              <p className="text-white font-verdana font-bold overflow-hidden text-ellipsis whitespace-nowrap">
-                {boostedBoss.name}
-              </p>
+            <div className="bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full flex flex-col items-center">
+              <img src={boostedBoss.image_url} alt={boostedBoss.name} className="w-16 h-16 mb-2" />
+              <p className="text-white font-verdana font-bold text-center">{boostedBoss.name}</p>
             </div>
           )}
+
           {boostedCreature && (
-            <div className=" bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full">
+            <div className=" bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full flex flex-col items-center">
               <img src={boostedCreature.image_url} alt={boostedCreature.name} className="w-16 h-16 mr-2" />
               <p className="text-white font-verdana font-bold overflow-hidden text-ellipsis whitespace-nowrap">
                 {boostedCreature.name}
