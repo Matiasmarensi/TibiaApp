@@ -33,7 +33,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen p-5 flex flex-col items-center background-image">
-      <div className="flex justify-between items-stretch w-full max-w-4xl ">
+      <div className="flex justify-between items-stretch w-full max-w-3xl ">
         <form
           onSubmit={handleSubmit}
           className="mb-5 flex flex-col md:flex-row items-center bg-white p-5 rounded-lg shadow-lg w-full h-full"
@@ -55,6 +55,7 @@ const Home = () => {
           />
           <button
             type="submit"
+            disabled={characterName.length === 0}
             className="bg-blue-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-800 transition"
             style={{
               backgroundColor: "rgb(13, 46, 43)",
@@ -66,14 +67,34 @@ const Home = () => {
 
         <div className="flex flex-row items-center justify-center ml-5 space-x-4 pb-5">
           {boostedBoss && (
-            <div className="bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full flex flex-col items-center">
+            <div
+              className="p-2 rounded-lg shadow-lg min-w-max h-full flex flex-col items-center"
+              style={{
+                fontFamily: "Verdana",
+                fontWeight: "bold",
+                backgroundImage: 'url("/fondo.png")',
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
               <img src={boostedBoss.image_url} alt={boostedBoss.name} className="w-16 h-16 mb-2" />
               <p className="text-white font-verdana font-bold text-center">{boostedBoss.name}</p>
             </div>
           )}
 
           {boostedCreature && (
-            <div className=" bg-gray-800 p-2 rounded-lg shadow-lg min-w-max h-full flex flex-col items-center">
+            <div
+              className="  p-2 rounded-lg shadow-lg min-w-max h-full flex flex-col items-center"
+              style={{
+                fontFamily: "Verdana",
+                fontWeight: "bold",
+                backgroundImage: 'url("/fondo.png")',
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
               <img src={boostedCreature.image_url} alt={boostedCreature.name} className="w-16 h-16 mr-2" />
               <p className="text-white font-verdana font-bold overflow-hidden text-ellipsis whitespace-nowrap">
                 {boostedCreature.name}

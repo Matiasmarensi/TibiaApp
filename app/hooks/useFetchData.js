@@ -70,10 +70,9 @@ const useCharacterData = () => {
 
         // map just the news from today
         const currentDate = getCurrentDate();
-        console.log(currentDate);
+
         const newsFromToday = news.filter((item) => item.date.startsWith(currentDate));
 
-        console.log(newsFromToday);
         if (newsFromToday) {
           setNews(newsFromToday);
         } else {
@@ -111,10 +110,12 @@ const useCharacterData = () => {
     setError(null);
     try {
       const response = await axios.get(`https://api.tibiadata.com/v4/character/${characterName}`);
+
       const character = {
         ...response.data.character.character,
         other_characters: response.data.character.other_characters,
       };
+      console.log(typeof character);
       const updatedCharacters = [...searchedCharacters, character];
       setSearchedCharacters(updatedCharacters);
       localStorage.setItem("searchedCharacters", JSON.stringify(updatedCharacters));
