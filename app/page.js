@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import Loader from "./components/loader";
 import useCharacterData from "./hooks/useFetchData"; // Asegúrate de importar el custom hook correctamente
-
+import Boosted from "./components/boosted";
 const CharacterInfo = lazy(() => import("@/app/components/characterinfo"));
 
 const Home = () => {
@@ -64,45 +64,9 @@ const Home = () => {
             Search
           </button>
         </form>
-
-        <div className="flex flex-row items-center justify-center ml-5 space-x-4 pb-5">
-          {boostedBoss && (
-            <div
-              className="p-2 rounded-lg shadow-lg min-w-max h-full flex flex-col items-center"
-              style={{
-                fontFamily: "Verdana",
-                fontWeight: "bold",
-                backgroundImage: 'url("/fondo.png")',
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }}
-            >
-              <img src={boostedBoss.image_url} alt={boostedBoss.name} className="w-16 h-16 mb-2" />
-              <p className="text-white font-verdana font-bold text-center">{boostedBoss.name}</p>
-            </div>
-          )}
-
-          {boostedCreature && (
-            <div
-              className="  p-2 rounded-lg shadow-lg min-w-max h-full flex flex-col items-center"
-              style={{
-                fontFamily: "Verdana",
-                fontWeight: "bold",
-                backgroundImage: 'url("/fondo.png")',
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }}
-            >
-              <img src={boostedCreature.image_url} alt={boostedCreature.name} className="w-16 h-16 mr-2" />
-              <p className="text-white font-verdana font-bold overflow-hidden text-ellipsis whitespace-nowrap">
-                {boostedCreature.name}
-              </p>
-            </div>
-          )}
-        </div>
+        <Boosted boostedBoss={boostedBoss} boostedCreature={boostedCreature} />
       </div>
+
       {loading && <Loader />}
       {error && <p className="text-black font-semibold">{error}</p>}
 
@@ -121,6 +85,7 @@ const Home = () => {
           );
         })}
       </div>
+
       <Suspense fallback={<Loader />}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mt-8 w-full max-w-4xl">
           {searchedCharacters.map((character, index) => (
