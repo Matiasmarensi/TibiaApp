@@ -41,7 +41,7 @@ const Home = () => {
             fontFamily: "Verdana",
             fontWeight: "bold",
             backgroundImage: 'url("/fondo.png")',
-            backgroundSize: "cover",
+            backgroundSize: "100%",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
           }}
@@ -56,8 +56,10 @@ const Home = () => {
           <button
             type="submit"
             disabled={characterName.length === 0}
-            className="bg-blue-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-800 transition"
+            className="bg-blue-700 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-800 hover:shadow-lg hover:scale-105 transition transform duration-200 ease-in-out"
             style={{
+              hover: "cursor: pointer",
+
               backgroundColor: "rgb(13, 46, 43)",
             }}
           >

@@ -17,9 +17,11 @@
 }
 .background-image {
   background-image: url('https://preview.redd.it/tibia-7-6-background-picture-without-the-lady-v0-bemglq6jryia1.png?width=1024&format=png&auto=webp&s=cb67f838c68c737b9bf68d2d6178f361c2b973b4');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-size: cover; /* Asegura que la imagen cubra todo el contenedor */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que la imagen se repita */
+  min-height: 100vh; /* Asegura que el contenedor tenga al menos la altura de la ventana */
+  overflow: hidden; /* Evita que el contenido desborde el contenedor */
 }
 .backgroundnews {
   background-image:url("https://static.tibia.com/images/global/content/title-background-green.gif");

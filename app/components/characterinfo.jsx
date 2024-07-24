@@ -70,7 +70,7 @@ const CharacterInfo = ({ character }) => {
           backgroundSize: "cover", // Esto ajusta el tamaño de la imagen para cubrir el botón
           backgroundPosition: "center", // Esto centra la imagen en el botón
           backgroundRepeat: "no-repeat", // Esto evita que la imagen se repita
-          color: "yellow", // Asegura que el texto sea visible sobre la imagen
+          color: "#ffd18c", // Asegura que el texto sea visible sobre la imagen
           textAlign: "center", // Centra el texto dentro del botón
         }}
         target="_blank"
