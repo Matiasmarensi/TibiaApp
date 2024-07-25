@@ -8,14 +8,13 @@ const getCurrentDate = () => {
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
 
-  console.log(`${year}-${month}-${day}`);
   return `${year}-${month}-${day}`;
 };
 
 const useCharacterData = () => {
   const [characterName, setCharacterName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState([]);
   const [staticCharacters, setStaticCharacters] = useState([]);
   const [boostedBoss, setBoostedBoss] = useState(null);
   const [boostedCreature, setBoostedCreature] = useState(null);
@@ -115,12 +114,11 @@ const useCharacterData = () => {
         ...response.data.character.character,
         other_characters: response.data.character.other_characters,
       };
-      console.log(typeof character);
+
       const updatedCharacters = [...searchedCharacters, character];
       setSearchedCharacters(updatedCharacters);
       localStorage.setItem("searchedCharacters", JSON.stringify(updatedCharacters));
     } catch (error) {
-      console.log(error.response.status);
       if (error.response.status !== 200) {
         setError("Character not found. Please check the name and try again.");
       }
