@@ -1,6 +1,8 @@
 "use client";
 import { Suspense, lazy } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaExternalLinkAlt } from "react-icons/fa";
+
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import Loader from "./components/loader";
 import useCharacterData from "./hooks/useFetchData"; // Asegúrate de importar el custom hook correctamente
@@ -49,8 +51,8 @@ const Home = () => {
               key={newsItem.id}
               className="max-h-20 overflow-y-auto bg-gray-800 p-2 rounded-lg shadow-lg mb-2 text-white font-verdana font-bold backgroundnews"
             >
-              <a href={newsItem.url} target="_blank" className="text-white-400 hover:underline mr-2">
-                LINK
+              <a href={newsItem.url} target="_blank" className="text-white-400 hover:underline mr-2 flex float-left">
+                <FaExternalLinkAlt />
               </a>
               {newsItem.news}
             </div>
