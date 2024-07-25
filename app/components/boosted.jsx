@@ -11,7 +11,7 @@ const Boosted = ({ boostedBoss, boostedCreature }) => {
     <div className="flex flex-row items-center justify-center ml-5 space-x-4 pb-8">
       {boostedBoss && (
         <div
-          className=" rounded-lg shadow-lg flex flex-col items-center justify-center w-32 h-32"
+          className=" rounded-lg shadow-lg flex flex-col p-1 w-32 h-32"
           style={{
             fontFamily: "Verdana",
             fontWeight: "bold",
@@ -33,7 +33,7 @@ const Boosted = ({ boostedBoss, boostedCreature }) => {
 
       {boostedCreature && (
         <div
-          className=" rounded-lg shadow-lg flex flex-col items-center justify-center w-32 h-32"
+          className="rounded-lg shadow-lg flex flex-col p-1 w-32 h-32"
           style={{
             fontFamily: "Verdana",
             fontWeight: "bold",
